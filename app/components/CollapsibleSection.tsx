@@ -24,7 +24,7 @@ export default function CollapsibleSection({
 
   return (
     <div className="overflow-hidden">
-      <div className="w-full px-3 py-2 bg-gray-600 text-white hover:bg-gray-700 flex items-center justify-between transition-colors">
+      <div className="w-full px-3 py-2 bg-gray-900 text-white hover:bg-black flex items-center justify-between transition-colors border-b border-gray-700">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center gap-2 flex-1 text-left"
@@ -43,7 +43,7 @@ export default function CollapsibleSection({
                 toggle.onChange(e.target.checked);
               }}
               onClick={(e) => e.stopPropagation()}
-              className="w-4 h-4 text-white bg-gray-700 border-gray-500 rounded focus:ring-white"
+              className="w-4 h-4 text-white bg-gray-800 border-gray-600 rounded focus:ring-white"
             />
           )}
           <button

@@ -11,7 +11,7 @@ export interface SketchProps {
 
 export const defaultSketchParams: SketchProps = {
   circleSize: 100,
-  speed: 2,
+  speed: 4.0,
   circleColor: '#3b82f6', // blue-500
   backgroundColor: '#000000', // black
   isPaused: false,

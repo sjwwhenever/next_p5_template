@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import { SketchProps } from '../types/sketch';
-import { createCircleSketch } from '../sketches/circleSketch';
+import { createTemplateSketch } from '../sketches/TemplateSketch';
 
 interface P5CanvasProps {
   params: SketchProps;
@@ -165,12 +165,12 @@ const P5Canvas = forwardRef<P5CanvasRef, P5CanvasProps>(({ params, isPaused }, r
 
     const initializeSketch = async () => {
       try {
-        console.log('P5Canvas: Loading p5 and creating circle sketch');
-        const sketchFactory = createCircleSketch(containerRef);
+        console.log('P5Canvas: Loading p5 and creating template sketch');
+        const sketchFactory = createTemplateSketch(containerRef);
         p5InstanceRef.current = await sketchFactory(params);
-        console.log('P5Canvas: Circle sketch created successfully');
+        console.log('P5Canvas: Template sketch created successfully');
       } catch (error) {
-        console.error('P5Canvas: Error creating circle sketch:', error);
+        console.error('P5Canvas: Error creating template sketch:', error);
       }
     };
 

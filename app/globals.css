@@ -6,22 +6,36 @@ body {
   overflow: hidden;
 }
 
-/* Custom slider styles */
+/* Custom slider styles - Black & White theme */
 .slider::-webkit-slider-thumb {
   appearance: none;
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #ffffff;
   cursor: pointer;
-  border: 2px solid #1f2937;
+  border: 2px solid #000000;
 }
 
 .slider::-moz-range-thumb {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: #ffffff;
   cursor: pointer;
-  border: 2px solid #1f2937;
+  border: 2px solid #000000;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #4b5563;
+  border: 1px solid #374151;
+}
+
+.slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #4b5563;
+  border: 1px solid #374151;
 }

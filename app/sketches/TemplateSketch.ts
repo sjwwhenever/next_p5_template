@@ -1,7 +1,7 @@
 import type { SketchProps } from '../types/sketch';
 import p5 from 'p5';
 
-export function createCircleSketch(containerRef: React.RefObject<HTMLDivElement | null>) {
+export function createTemplateSketch(containerRef: React.RefObject<HTMLDivElement | null>) {
   return async (initialParams: SketchProps) => {
     // Import p5 dynamically to ensure client-side only
     const p5Module = (await import('p5')).default;
@@ -18,9 +18,15 @@ export function createCircleSketch(containerRef: React.RefObject<HTMLDivElement 
     // Track time for pause handling
     let lastTime = 0;
 
+    // Hue for color animation
+    let hue = 0;
+
     const sketch = (p: p5) => {
       p.setup = () => {
-        const canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+        // Use container dimensions instead of window dimensions
+        const width = containerRef.current?.clientWidth || p.windowWidth;
+        const height = containerRef.current?.clientHeight || p.windowHeight;
+        const canvas = p.createCanvas(width, height);
         if (containerRef.current) {
           canvas.parent(containerRef.current);
         }
@@ -42,7 +48,11 @@ export function createCircleSketch(containerRef: React.RefObject<HTMLDivElement 
         if ((p as any).captureWithTransparentBackground) {
           p.clear();
         } else {
-          p.background(params.backgroundColor);
+          // Add semi-transparent overlay for trail effect (medium persistence)
+          const overlayColor = p.color(params.backgroundColor);
+          overlayColor.setAlpha(50);
+          p.fill(overlayColor);
+          p.rect(0, 0, p.width, p.height);
         }
 
         // Update position if not paused
@@ -64,16 +74,24 @@ export function createCircleSketch(containerRef: React.RefObject<HTMLDivElement 
             vy *= -1;
             y = p.constrain(y, params.circleSize / 2, p.height - params.circleSize / 2);
           }
+
+          // Update hue for color animation
+          hue = (hue + 1) % 360;
         }
 
-        // Draw circle
-        p.fill(params.circleColor);
+        // Draw circle with animated color
+        p.colorMode(p.HSB, 360, 100, 100);
+        p.fill(hue, 80, 90);
         p.noStroke();
         p.circle(x, y, params.circleSize);
+        p.colorMode(p.RGB, 255); // Switch back to RGB
       };
 
       p.windowResized = () => {
-        p.resizeCanvas(p.windowWidth, p.windowHeight);
+        // Use container dimensions instead of window dimensions
+        const width = containerRef.current?.clientWidth || p.windowWidth;
+        const height = containerRef.current?.clientHeight || p.windowHeight;
+        p.resizeCanvas(width, height);
 
         // Keep circle within bounds after resize
         x = p.constrain(x, params.circleSize / 2, p.width - params.circleSize / 2);

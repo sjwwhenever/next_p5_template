@@ -13,8 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js + p5.js Template",
+  title: "next p5 template",
   description: "Interactive p5.js sketch template with Next.js",
+  authors: [
+    {
+      name: "sjwwhenever (不可兼容)",
+      url: "https://github.com/sjwwhenever",
+    },
+  ],
+  creator: "sjwwhenever (不可兼容)",
+  icons: {
+    icon: "/logo.JPG",
+    apple: "/logo.JPG",
+  },
 };
 
 export default function RootLayout({

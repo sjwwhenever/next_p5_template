@@ -7,28 +7,6 @@ A clean, minimal template for creating interactive p5.js sketches with Next.js. 
 ![p5.js](https://img.shields.io/badge/p5.js-1.10-pink?style=flat-square&logo=p5.js)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square&logo=tailwindcss)
 
-## ✨ Features
-
-### Core Functionality
-- **Simple p5.js Integration**: Seamless p5.js setup with React/Next.js
-- **Real-time Parameter Updates**: Modify sketch properties without reloading
-- **Responsive Canvas Sizing**: Canvas automatically adjusts to container dimensions
-
-### UI Controls
-- **Icon-Based Controls**: Clean, minimalist icon buttons for common actions
-- **Black & White Theme**: Professional monochrome UI design
-- **Collapsible Settings Panel**: Expandable panel with customizable sketch parameters
-- **Keyboard Shortcuts**: Spacebar to pause/play animation
-
-### Export Capabilities
-- **Image Capture**: Save individual frames as PNG
-  - Optional transparent background support
-  - Multiple quality settings (low, medium, high)
-- **Video Recording**: Record 10-second video clips
-  - Multiple quality presets
-  - Automatic stop after duration
-- **Configuration Export/Import**: Save and load sketch parameters as JSON
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -82,7 +60,7 @@ claude-code
 - "Implement a grid of interactive shapes"
 
 #### Kimi K2 (kimi-cc)
-[Kimi K2](https://github.com/moonbitlang/kimi-cc) is another powerful AI coding assistant:
+[Kimi K2](https://github.com/LLM-Red-Team/kimi-cc) is another powerful AI coding assistant:
 
 ```bash
 # Install kimi-cc
@@ -116,49 +94,6 @@ kimi-cc
 5. **Export and Share**: Save your configurations
    - Use the Export button to save sketch parameters
    - Share JSON configs with your team or across sessions
-
-### Common AI-Assisted Workflows
-
-**Quick Prototype:**
-```
-You: "Create a generative art sketch with flowing lines"
-AI: [Implements sketch with custom parameters]
-You: "Add color variation based on line position"
-AI: [Enhances with color logic]
-```
-
-**Debug and Optimize:**
-```
-You: "The animation is laggy, how can I optimize it?"
-AI: [Analyzes performance, suggests improvements]
-```
-
-**Learn by Example:**
-```
-You: "Show me how to implement flocking behavior"
-AI: [Creates example with explanation]
-```
-
-## 📁 Project Structure
-
-```
-app/
-├── components/
-│   ├── P5Canvas.tsx           # Reusable p5.js wrapper component
-│   ├── GuiPanel.tsx           # Control panel with settings and actions
-│   ├── CollapsibleSection.tsx # Expandable UI section component
-│   └── AuthorFooter.tsx       # Footer with author information
-├── sketches/
-│   └── TemplateSketch.ts      # Your p5.js sketch (edit this!)
-├── types/
-│   └── sketch.ts              # TypeScript type definitions and defaults
-├── page.tsx                   # Main application page
-├── layout.tsx                 # Root layout with metadata
-└── globals.css                # Global styles and Tailwind config
-
-public/
-└── logo.JPG                   # Website favicon and logo
-```
 
 ## 🎨 Customizing Your Sketch
 

@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   ],
   creator: "sjwwhenever (不可兼容)",
   icons: {
-    icon: "/logo.JPG",
-    apple: "/logo.JPG",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
 };
 

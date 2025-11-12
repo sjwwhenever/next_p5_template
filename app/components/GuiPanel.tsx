@@ -1,14 +1,17 @@
 'use client';
 
-import { SketchProps } from '../types/sketch';
+import type { Example, BaseExampleParams } from '../examples/types';
 import CollapsibleSection from './CollapsibleSection';
 import CircularProgress from './CircularProgress';
+import ExampleSelector from './ExampleSelector';
 import { Settings2, Play, Pause, Camera, Video, Download, Upload } from 'lucide-react';
 import { useState, useRef } from 'react';
 
-interface GuiPanelProps {
-  params: SketchProps;
-  onParamChange: (params: Partial<SketchProps>) => void;
+interface GuiPanelProps<T extends BaseExampleParams> {
+  example: Example<T>;
+  params: T;
+  onExampleChange: (example: Example<any>) => void;
+  onParamChange: (params: T) => void;
   onCaptureImage: (transparent: boolean) => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
@@ -16,11 +19,13 @@ interface GuiPanelProps {
   recordingProgress: number;
   isPaused: boolean;
   onTogglePause: () => void;
-  onImportConfig: (config: SketchProps) => void;
+  onImportConfig: (config: T) => void;
 }
 
-export default function GuiPanel({
+export default function GuiPanel<T extends BaseExampleParams>({
+  example,
   params,
+  onExampleChange,
   onParamChange,
   onCaptureImage,
   onStartRecording,
@@ -30,7 +35,7 @@ export default function GuiPanel({
   isPaused,
   onTogglePause,
   onImportConfig,
-}: GuiPanelProps) {
+}: GuiPanelProps<T>) {
   const [transparentCapture, setTransparentCapture] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -66,62 +71,20 @@ export default function GuiPanel({
     }
   };
 
+  const ControlsComponent = example.Controls;
+
   return (
     <div className="w-80 bg-gray-800 text-white flex flex-col h-full overflow-hidden">
       {/* Scrollable Controls */}
       <div className="flex-1 overflow-y-auto">
-        <CollapsibleSection title="p5 settings" icon={<Settings2 size={16} />}>
-          {/* Circle Size */}
-          <div className="space-y-1">
-            <div className="flex justify-between items-center">
-              <label className="text-xs text-gray-300">Circle Size</label>
-              <span className="text-xs text-gray-400">{params.circleSize}px</span>
-            </div>
-            <input
-              type="range"
-              min="10"
-              max="300"
-              value={params.circleSize}
-              onChange={(e) => onParamChange({ circleSize: Number(e.target.value) })}
-              className="w-full slider"
-            />
-          </div>
+        {/* Example Selector */}
+        <div className="p-3 border-b border-gray-700">
+          <ExampleSelector selectedExample={example} onExampleChange={onExampleChange} />
+        </div>
 
-          {/* Speed */}
-          <div className="space-y-1">
-            <div className="flex justify-between items-center">
-              <label className="text-xs text-gray-300">Speed</label>
-              <span className="text-xs text-gray-400">{params.speed.toFixed(1)}</span>
-            </div>
-            <input
-              type="range"
-              min="0.5"
-              max="10"
-              step="0.1"
-              value={params.speed}
-              onChange={(e) => onParamChange({ speed: Number(e.target.value) })}
-              className="w-full slider"
-            />
-          </div>
-
-          {/* Background Color */}
-          <div className="space-y-1">
-            <label className="text-xs text-gray-300">Background Color</label>
-            <div className="flex gap-2">
-              <input
-                type="color"
-                value={params.backgroundColor}
-                onChange={(e) => onParamChange({ backgroundColor: e.target.value })}
-                className="w-12 h-8 rounded cursor-pointer"
-              />
-              <input
-                type="text"
-                value={params.backgroundColor}
-                onChange={(e) => onParamChange({ backgroundColor: e.target.value })}
-                className="flex-1 px-2 py-1 bg-gray-700 rounded text-xs"
-              />
-            </div>
-          </div>
+        {/* Example-specific Controls */}
+        <CollapsibleSection title="Settings" icon={<Settings2 size={16} />}>
+          <ControlsComponent params={params} onParamsChange={onParamChange} />
         </CollapsibleSection>
       </div>
 

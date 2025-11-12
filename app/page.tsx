@@ -4,19 +4,53 @@ import { useState, useRef, useEffect } from 'react';
 import P5Canvas, { P5CanvasRef } from './components/P5Canvas';
 import GuiPanel from './components/GuiPanel';
 import AuthorFooter from './components/AuthorFooter';
-import { defaultSketchParams, SketchProps } from './types/sketch';
+import { getDefaultExample } from './examples/registry';
+import type { Example, BaseExampleParams } from './examples/types';
 
 export default function Home() {
-  const [params, setParams] = useState<SketchProps>(defaultSketchParams);
+  // Get the default example (first registered example)
+  const defaultExample = getDefaultExample()!;
+
+  // State for selected example
+  const [selectedExample, setSelectedExample] = useState<Example<any>>(defaultExample);
+
+  // State for parameters per example (keyed by example ID)
+  const [exampleParams, setExampleParams] = useState<Record<string, any>>({
+    [defaultExample.metadata.id]: defaultExample.defaultParams,
+  });
+
   const [isPaused, setIsPaused] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
   const canvasRef = useRef<P5CanvasRef>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Get current params for selected example
+  const currentParams = exampleParams[selectedExample.metadata.id] || selectedExample.defaultParams;
+
+  // Handle example change
+  const handleExampleChange = (newExample: Example<any>) => {
+    console.log('Switching to example:', newExample.metadata.name);
+
+    // Initialize params for new example if not already present
+    if (!exampleParams[newExample.metadata.id]) {
+      setExampleParams((prev) => ({
+        ...prev,
+        [newExample.metadata.id]: newExample.defaultParams,
+      }));
+    }
+
+    setSelectedExample(newExample);
+    // Unpause when switching examples
+    setIsPaused(false);
+  };
+
   // Handle parameter changes from GUI
-  const handleParamChange = (newParams: Partial<SketchProps>) => {
-    setParams((prev) => ({ ...prev, ...newParams }));
+  const handleParamChange = (newParams: any) => {
+    setExampleParams((prev) => ({
+      ...prev,
+      [selectedExample.metadata.id]: newParams,
+    }));
   };
 
   // Toggle pause/play
@@ -93,15 +127,20 @@ export default function Home() {
   };
 
   // Import configuration
-  const handleImportConfig = (config: SketchProps) => {
-    setParams({ ...config, isPaused: false });
+  const handleImportConfig = (config: any) => {
+    setExampleParams((prev) => ({
+      ...prev,
+      [selectedExample.metadata.id]: { ...config, isPaused: false },
+    }));
   };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-black">
       {/* GUI Panel */}
       <GuiPanel
-        params={params}
+        example={selectedExample}
+        params={currentParams}
+        onExampleChange={handleExampleChange}
         onParamChange={handleParamChange}
         onCaptureImage={handleCaptureImage}
         onStartRecording={handleStartRecording}
@@ -117,7 +156,12 @@ export default function Home() {
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {/* P5 Canvas */}
         <div className="flex-1">
-          <P5Canvas ref={canvasRef} params={params} isPaused={isPaused} />
+          <P5Canvas
+            ref={canvasRef}
+            example={selectedExample}
+            params={currentParams}
+            isPaused={isPaused}
+          />
         </div>
 
         {/* Author Footer */}

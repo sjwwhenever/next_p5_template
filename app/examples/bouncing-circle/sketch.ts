@@ -1,8 +1,8 @@
-import type { SketchProps } from '../types/sketch';
+import type { BouncingCircleParams } from './types';
 import p5 from 'p5';
 
-export function createTemplateSketch(containerRef: React.RefObject<HTMLDivElement | null>) {
-  return async (initialParams: SketchProps) => {
+export function createBouncingCircleSketch(containerRef: React.RefObject<HTMLDivElement | null>) {
+  return async (initialParams: BouncingCircleParams) => {
     // Import p5 dynamically to ensure client-side only
     const p5Module = (await import('p5')).default;
 
@@ -99,7 +99,7 @@ export function createTemplateSketch(containerRef: React.RefObject<HTMLDivElemen
       };
 
       // Method to update parameters without recreating sketch
-      (p as any).updateParams = (newParams: SketchProps) => {
+      (p as any).updateParams = (newParams: BouncingCircleParams) => {
         const oldSpeed = params.speed;
         params = { ...newParams };
         isPaused = newParams.isPaused;

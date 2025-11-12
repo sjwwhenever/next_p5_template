@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
-import { SketchProps } from '../types/sketch';
-import { createTemplateSketch } from '../sketches/TemplateSketch';
+import type { Example, BaseExampleParams } from '../examples/types';
 
-interface P5CanvasProps {
-  params: SketchProps;
+interface P5CanvasProps<T extends BaseExampleParams> {
+  example: Example<T>;
+  params: T;
   isPaused: boolean;
 }
 
@@ -16,7 +16,7 @@ export interface P5CanvasRef {
   isRecording: boolean;
 }
 
-const P5Canvas = forwardRef<P5CanvasRef, P5CanvasProps>(({ params, isPaused }, ref) => {
+const P5Canvas = forwardRef<P5CanvasRef, P5CanvasProps<any>>(({ example, params, isPaused }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const p5InstanceRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -155,22 +155,23 @@ const P5Canvas = forwardRef<P5CanvasRef, P5CanvasProps>(({ params, isPaused }, r
   }));
 
   useEffect(() => {
-    console.log('P5Canvas: useEffect running - CLIENT SIDE');
+    console.log('P5Canvas: useEffect running - Creating sketch for example:', example.metadata.name);
 
     // Clean up previous instance if it exists
     if (p5InstanceRef.current) {
+      console.log('P5Canvas: Cleaning up previous sketch');
       p5InstanceRef.current.remove();
       p5InstanceRef.current = null;
     }
 
     const initializeSketch = async () => {
       try {
-        console.log('P5Canvas: Loading p5 and creating template sketch');
-        const sketchFactory = createTemplateSketch(containerRef);
+        console.log('P5Canvas: Loading p5 and creating sketch:', example.metadata.name);
+        const sketchFactory = example.createSketch(containerRef);
         p5InstanceRef.current = await sketchFactory(params);
-        console.log('P5Canvas: Template sketch created successfully');
+        console.log('P5Canvas: Sketch created successfully:', example.metadata.name);
       } catch (error) {
-        console.error('P5Canvas: Error creating template sketch:', error);
+        console.error('P5Canvas: Error creating sketch:', error);
       }
     };
 
@@ -179,11 +180,12 @@ const P5Canvas = forwardRef<P5CanvasRef, P5CanvasProps>(({ params, isPaused }, r
     // Cleanup function
     return () => {
       if (p5InstanceRef.current) {
+        console.log('P5Canvas: Cleaning up sketch on unmount');
         p5InstanceRef.current.remove();
         p5InstanceRef.current = null;
       }
     };
-  }, []);
+  }, [example]);
 
   // Handle parameter updates without recreating the entire sketch
   useEffect(() => {

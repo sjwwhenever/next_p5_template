@@ -2,6 +2,7 @@ import type { Example, ExampleRegistry, BaseExampleParams } from './types';
 import { bouncingCircleExample } from './bouncing-circle';
 import { particleEmitterExample } from './particle-emitter';
 import { gridRippleExample } from './grid-ripple';
+import { randomRectanglesExample } from './random-rectangles';
 
 /**
  * Registry of all available examples
@@ -12,6 +13,7 @@ const registry: ExampleRegistry = {};
 registerExample(bouncingCircleExample);
 registerExample(particleEmitterExample);
 registerExample(gridRippleExample);
+registerExample(randomRectanglesExample);
 
 /**
  * Register an example in the registry
